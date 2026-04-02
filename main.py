@@ -33,9 +33,10 @@ class DNSThreatReporter:
         self.sniffer = DNSSniffer(interface=interface)
         self.parser = DNSParser()
         self.analyzer = DNSAnalyzer(
-            blacklist_path=blacklist_path or str(Path(__file__).parent / "data" / "blacklist.txt")
+            blacklist_path=blacklist_path or str(Path(__file__).parent / "data" / "blacklist.txt"),
+            whitelist_path=str(Path(__file__).parent / "data" / "whitelist.txt"),
         )
-        self.reporter = DNSReporter(log_dir=log_dir, verbose=verbose)
+        self.reporter = DNSReporter(log_dir=log_dir, verbose=verbose, analyzer=self.analyzer)
 
     def handle_packet(self, packet):
         """Pipeline: Sniffer -> Parser -> Analyzer -> Reporter"""

@@ -7,6 +7,9 @@ __pycache__/
 # Logs - generated at runtime, don't commit
 logs/
 
+# User whitelist - personal per machine, starts empty on each clone
+data/whitelist.txt
+
 # Virtual environments
 venv/
 .venv/
@@ -18,3 +21,6 @@ env/
 # IDE
 .vscode/
 .idea/
+
+# Claude Code - entire directory is personal (settings, permissions, session data)
+.claude/

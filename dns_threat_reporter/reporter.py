@@ -48,10 +48,11 @@ THREAT_LABELS = {
 class DNSReporter:
     """Handles output display and log file management."""
 
-    def __init__(self, log_dir: str = "logs", verbose: bool = False):
+    def __init__(self, log_dir: str = "logs", verbose: bool = False, analyzer=None):
         self.verbose = verbose
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(parents=True, exist_ok=True)
+        self._analyzer = analyzer  # reference to analyzer for whitelisting
 
         # Create log files with timestamp in name
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -112,6 +113,7 @@ class DNSReporter:
                 f"| {result.alerts[0] if result.alerts else ''}"
                 f"{Colors.RESET}"
             )
+            self._prompt_whitelist(query.domain)
             return
 
         # HIGH and CRITICAL - full alert box
@@ -136,7 +138,36 @@ class DNSReporter:
             print(f"  {'─'*50}")
             print(f"  Scores: {result.scores}")
 
-        print(f"{'='*70}\n")
+        print(f"{'='*70}")
+        self._prompt_whitelist(query.domain)
+        print()
+
+    def _prompt_whitelist(self, domain: str):
+        """Ask the user if they want to whitelist this domain."""
+        if not self._analyzer:
+            return
+
+        # Extract parent domain (e.g. sub.company.com -> company.com)
+        parts = domain.split(".")
+        parent = ".".join(parts[-2:]) if len(parts) >= 2 else domain
+
+        print(
+            f"{Colors.GRAY}  >> Know this domain? "
+            f"[w] whitelist '{domain}'  "
+            f"[W] whitelist '*.{parent}'  "
+            f"[Enter] ignore{Colors.RESET}"
+        )
+
+        try:
+            choice = input("  >> ").strip()
+            if choice == "w":
+                self._analyzer.add_to_whitelist(domain)
+                print(f"{Colors.GREEN}  >> '{domain}' added to whitelist.{Colors.RESET}")
+            elif choice == "W":
+                self._analyzer.add_to_whitelist(parent)
+                print(f"{Colors.GREEN}  >> '*.{parent}' added to whitelist (covers all subdomains).{Colors.RESET}")
+        except (EOFError, KeyboardInterrupt):
+            pass  # non-interactive mode (demo/pcap), skip silently
 
     def _write_to_log(self, result: AnalysisResult):
         """Write to the full query log."""

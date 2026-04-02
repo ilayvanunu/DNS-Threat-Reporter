@@ -79,13 +79,17 @@ class DNSAnalyzer:
         "ynet.co.il", "walla.co.il", "mako.co.il",
     }
 
-    def __init__(self, blacklist_path: Optional[str] = None):
+    def __init__(self, blacklist_path: Optional[str] = None, whitelist_path: Optional[str] = None):
         self.blacklist: set[str] = set()
+        self.user_whitelist: set[str] = set()
+        self._whitelist_path: Optional[str] = whitelist_path
         self._query_history: dict[str, list[float]] = defaultdict(list)
         self._domain_counter: dict[str, int] = defaultdict(int)
 
         if blacklist_path:
             self.load_blacklist(blacklist_path)
+        if whitelist_path:
+            self.load_whitelist(whitelist_path)
 
     def load_blacklist(self, filepath: str):
         """Load malicious domains from a blacklist file."""
@@ -101,6 +105,35 @@ class DNSAnalyzer:
                     self.blacklist.add(line)
 
         print(f"[Analyzer] Loaded {len(self.blacklist)} domains into blacklist")
+
+    def load_whitelist(self, filepath: str):
+        """Load user-whitelisted domains from file."""
+        path = Path(filepath)
+        if not path.exists():
+            return  # whitelist starts empty, that's fine
+
+        with open(path, "r") as f:
+            for line in f:
+                line = line.strip().lower()
+                if line and not line.startswith("#"):
+                    self.user_whitelist.add(line)
+
+        if self.user_whitelist:
+            print(f"[Analyzer] Loaded {len(self.user_whitelist)} user-whitelisted domains")
+
+    def add_to_whitelist(self, domain: str):
+        """Add a domain to the user whitelist and persist it to disk."""
+        domain = domain.lower().strip()
+        if domain in self.user_whitelist:
+            return
+
+        self.user_whitelist.add(domain)
+
+        # Persist to file
+        if self._whitelist_path:
+            with open(self._whitelist_path, "a") as f:
+                f.write(f"{domain}\n")
+            print(f"[Analyzer] '{domain}' added to whitelist and saved.")
 
     def analyze(self, query: DNSQuery) -> AnalysisResult:
         """
@@ -294,10 +327,17 @@ class DNSAnalyzer:
         return ThreatLevel.SAFE, None
 
     def _is_whitelisted(self, domain_lower: str) -> bool:
-        """Check if domain belongs to a known safe service."""
+        """Check if domain belongs to a known safe service or user whitelist."""
+        # Check built-in safe domains
         for safe in self.SAFE_DOMAINS:
             if domain_lower == safe or domain_lower.endswith("." + safe):
                 return True
+
+        # Check user whitelist (exact and parent match)
+        for safe in self.user_whitelist:
+            if domain_lower == safe or domain_lower.endswith("." + safe):
+                return True
+
         return False
 
     def get_stats(self) -> dict:
