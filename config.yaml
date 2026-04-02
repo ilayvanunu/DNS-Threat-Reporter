@@ -1,0 +1,28 @@
+# DNS Threat Reporter - Configuration
+
+# Network Settings
+network:
+  interface: null # null = all interfaces, or specify e.g., "en0", "eth0"
+
+# Analyzer Settings
+analyzer:
+  blacklist_path: "data/blacklist.txt"
+  max_domain_length: 50
+  max_subdomain_length: 30
+  entropy_threshold: 3.8
+  entropy_critical_threshold: 4.2
+  max_queries_per_minute: 60
+
+# Reporter Settings
+reporter:
+  log_dir: "logs"
+  verbose: false # Show details for safe queries too
+
+# Detection toggles - enable/disable specific checks
+detection:
+  blacklist: true
+  length_analysis: true
+  entropy_analysis: true
+  rate_analysis: true
+  tunneling_detection: true
+  tld_check: true

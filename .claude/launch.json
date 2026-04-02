@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "DNS Threat Reporter - Demo Mode",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["main.py", "--demo"],
+      "port": 0
+    },
+    {
+      "name": "DNS Threat Reporter - Live Monitor (all interfaces)",
+      "runtimeExecutable": "sudo",
+      "runtimeArgs": ["python3", "main.py"],
+      "port": 0
+    },
+    {
+      "name": "DNS Threat Reporter - Live Monitor (verbose)",
+      "runtimeExecutable": "sudo",
+      "runtimeArgs": ["python3", "main.py", "-v"],
+      "port": 0
+    },
+    {
+      "name": "DNS Threat Reporter - PCAP Analysis",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["main.py", "--pcap", "sample.pcap"],
+      "port": 0
+    }
+  ]
+}

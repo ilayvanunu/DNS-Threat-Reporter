@@ -1,0 +1,50 @@
+# DNS Threat Reporter - Blacklist
+
+# === Known Malware C2 Domains ===
+malware-site.com
+evil-server.net
+badactor.xyz
+command-control.tk
+c2-server.ml
+botnet-master.ga
+ransomware-pay.cf
+keylogger-data.gq
+
+# === Phishing Domains ===
+login-verify-account.com
+secure-banklogin.com
+paypa1-verify.com
+amaz0n-security.com
+g00gle-alert.com
+micros0ft-update.net
+apple-id-verify.tk
+netflix-payment-update.com
+
+# === Crypto Mining / Cryptojacking ===
+coinhive.com
+crypto-loot.com
+coin-hive.com
+minero.cc
+jsecoin.com
+
+# === Known Malicious Infrastructure ===
+darkweb-market.onion.link
+exploit-kit.pw
+phishing-server.su
+spam-relay.cc
+
+# === DGA-style domains (examples) ===
+xkjhf82js.xyz
+a9d8f7g6h5.top
+qwerty123456.club
+zxcvbnm987.work
+
+# === DNS Tunneling / Data Exfiltration ===
+tunnel.dnstunnel.com
+exfil-data.evil.com
+dns-c2.hacker-server.com
+
+# === Test domains (for testing purposes) ===
+test-malware.example.com
+test-phishing.example.com
+test-c2.example.com
