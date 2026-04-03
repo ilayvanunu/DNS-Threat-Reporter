@@ -1,7 +1,45 @@
 """
-DNS Analyzer - Checks queries against a blacklist and detects anomalies.
-Performs threat detection: blacklist matching, entropy analysis,
-rate anomaly detection, and DNS tunneling detection.
+DNS Analyzer - Multi-layered threat detection engine.
+
+This module is the third stage of the pipeline. It receives a DNSQuery
+and runs it through six independent detection checks, each producing a
+ThreatLevel and an optional human-readable alert message.
+
+Detection methods
+-----------------
+1. Blacklist matching
+   Compares the domain (and every parent domain) against a list of known
+   malicious domains. A match immediately sets the threat level to CRITICAL.
+
+2. Domain length analysis
+   Unusually long domain names can indicate DNS-based data exfiltration,
+   where a client encodes stolen data in the subdomain labels of a query
+   (e.g. <base64-payload>.attacker.com).
+
+3. Shannon entropy analysis (DGA detection)
+   Legitimate domain names are human-readable and have low entropy.
+   Malware often uses Domain Generation Algorithms (DGAs) to produce
+   random-looking domains (e.g. 'x7k9m2p4q8w1.xyz') as C2 rendezvous
+   points. High Shannon entropy is a strong indicator of DGA activity.
+
+4. Rate anomaly detection
+   Tracks queries per source IP in a 60-second sliding window.
+   A very high query rate from a single host can indicate C2 beaconing
+   (malware periodically phoning home) or automated scanning.
+
+5. DNS tunneling detection
+   Looks for hex- or base64-encoded data packed into subdomain labels.
+   DNS tunneling tools (e.g. dnscat2, iodine) use this to exfiltrate data
+   or establish covert command channels over DNS port 53, which is rarely
+   blocked by firewalls.
+
+6. Suspicious TLD detection
+   Certain top-level domains (e.g. .tk, .ml, .ga, .xyz) are disproportionately
+   used by attackers because they are free or very cheap to register.
+
+After all checks, the final threat level is the highest level produced
+by any single check. If the domain is on the whitelist the result is
+downgraded to SAFE (except for CRITICAL blacklist hits).
 """
 
 from __future__ import annotations
@@ -82,6 +120,7 @@ class DNSAnalyzer:
     def __init__(self, blacklist_path: Optional[str] = None, whitelist_path: Optional[str] = None):
         self.blacklist: set[str] = set()
         self.user_whitelist: set[str] = set()
+        self._blacklist_path: Optional[str] = blacklist_path
         self._whitelist_path: Optional[str] = whitelist_path
         self._query_history: dict[str, list[float]] = defaultdict(list)
         self._domain_counter: dict[str, int] = defaultdict(int)
@@ -134,6 +173,43 @@ class DNSAnalyzer:
             with open(self._whitelist_path, "a") as f:
                 f.write(f"{domain}\n")
             print(f"[Analyzer] '{domain}' added to whitelist and saved.")
+
+    def add_to_blacklist(self, domain: str):
+        """Add a domain to the blacklist and persist it to disk."""
+        domain = domain.lower().strip()
+        if domain in self.blacklist:
+            return
+
+        self.blacklist.add(domain)
+
+        if self._blacklist_path:
+            with open(self._blacklist_path, "a") as f:
+                f.write(f"{domain}\n")
+            print(f"[Analyzer] '{domain}' added to blacklist and saved.")
+
+    def remove_from_whitelist(self, domain: str):
+        """Remove a domain from the user whitelist and rewrite the file."""
+        domain = domain.lower().strip()
+        self.user_whitelist.discard(domain)
+
+        if self._whitelist_path:
+            path = Path(self._whitelist_path)
+            if path.exists():
+                lines = path.read_text().splitlines()
+                lines = [l for l in lines if l.strip().lower() != domain and l.strip()]
+                path.write_text("\n".join(lines) + ("\n" if lines else ""))
+
+    def remove_from_blacklist(self, domain: str):
+        """Remove a domain from the blacklist and rewrite the file."""
+        domain = domain.lower().strip()
+        self.blacklist.discard(domain)
+
+        if self._blacklist_path:
+            path = Path(self._blacklist_path)
+            if path.exists():
+                lines = path.read_text().splitlines()
+                lines = [l for l in lines if l.strip().lower() != domain and l.strip()]
+                path.write_text("\n".join(lines) + ("\n" if lines else ""))
 
     def analyze(self, query: DNSQuery) -> AnalysisResult:
         """

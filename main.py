@@ -150,6 +150,7 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
+  python3 main.py --gui                 # Launch the graphical interface
   sudo python3 main.py                  # Live monitoring on all interfaces
   sudo python3 main.py -i en0           # Monitor a specific interface
   sudo python3 main.py -v               # Verbose mode
@@ -161,10 +162,17 @@ Examples:
     parser.add_argument("-b", "--blacklist", help="Path to a custom blacklist file")
     parser.add_argument("-v", "--verbose", action="store_true", help="Show details for all queries, including safe ones")
     parser.add_argument("-l", "--log-dir", default="logs", help="Log output directory (default: logs)")
+    parser.add_argument("--gui", action="store_true", help="Launch the graphical user interface")
     parser.add_argument("--demo", action="store_true", help="Run demo with simulated traffic")
     parser.add_argument("--pcap", help="Analyze an existing PCAP file")
 
     args = parser.parse_args()
+
+    if args.gui:
+        from dns_threat_reporter.gui import DNSThreatReporterGUI
+        gui = DNSThreatReporterGUI()
+        gui.run()
+        return
 
     app = DNSThreatReporter(
         interface=args.interface,

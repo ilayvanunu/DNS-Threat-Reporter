@@ -1,6 +1,11 @@
 # DNS Threat Reporter - Blacklist
+# One domain per line. Lines starting with # are comments.
+# Subdomains of any listed domain are automatically matched.
+# Last updated: 2026-04
 
-# === Known Malware C2 Domains ===
+# =============================================================
+# === MALWARE C2 / BOTNET INFRASTRUCTURE ===
+# =============================================================
 malware-site.com
 evil-server.net
 badactor.xyz
@@ -9,42 +14,353 @@ c2-server.ml
 botnet-master.ga
 ransomware-pay.cf
 keylogger-data.gq
+rat-controller.pw
+stealer-logs.su
+loader-panel.cc
+dropper-cdn.top
+cobalt-strike-team.com
+metasploit-c2.net
+darkcomet-server.xyz
+njrat-panel.club
+asyncrat-c2.top
+redline-stealer.xyz
+agent-tesla-c2.net
+remcos-rat.xyz
 
-# === Phishing Domains ===
-login-verify-account.com
-secure-banklogin.com
-paypa1-verify.com
-amaz0n-security.com
+# =============================================================
+# === RANSOMWARE PAYMENT / EXTORTION ===
+# =============================================================
+ransomware-decrypt.com
+pay-ransom-now.net
+unlock-files-now.com
+bitcoin-ransom.xyz
+decryptor-key.top
+your-files-encrypted.com
+ransomware-support.cc
+locky-decrypt.net
+wannacry-payment.com
+revil-payment.xyz
+darkside-ransom.top
+lockbit-support.net
+blackcat-ransom.xyz
+conti-decrypt.club
+
+# =============================================================
+# === MICROSOFT TYPOSQUATTING & PHISHING ===
+# Attackers replace letters with visually similar characters
+# or transpose/remove letters to trick users into trusting the domain.
+# =============================================================
+micros0ft.com
+micros0ft.net
+rnicrosoft.com
+miicrosoft.com
+microsooft.com
+microsofft.com
+microsfot.com
+micosoft.com
+microsft.com
+micorsoft.com
+micro-soft-update.com
+microsoft-security-alert.com
+microsoft-account-verify.com
+microsoft-support-center.net
+microsoft-helpdesk.xyz
+microsoft-license-renew.com
+microsoftsupport-online.com
+microsoft365-login.net
+office365-verify.com
+office-365-login.net
+office365-security.xyz
+outlook-verify-account.com
+outlook-login-secure.com
+windowsupdate-patch.net
+azure-account-verify.com
+onedrive-share-access.com
+teams-meeting-verify.net
+
+# =============================================================
+# === GOOGLE TYPOSQUATTING & PHISHING ===
+# =============================================================
+g00gle.com
+go0gle.com
+googie.com
+googel.com
+gooogle.com
+g0ogle.com
+googgle.com
+google-verify.com
+google-account-alert.com
+google-security-notice.com
+google-support-helpdesk.com
+google-login-verify.net
+google-2fa-confirm.com
+gmail-verify-account.com
+gmail-login-secure.net
+gmail-account-suspended.com
+googledrive-share.net
+google-docs-view.com
 g00gle-alert.com
-micros0ft-update.net
-apple-id-verify.tk
-netflix-payment-update.com
 
-# === Crypto Mining / Cryptojacking ===
+# =============================================================
+# === APPLE TYPOSQUATTING & PHISHING ===
+# =============================================================
+app1e.com
+app1e.net
+appie.com
+aple.com
+aplle.com
+apple-id-verify.tk
+apple-id-suspended.com
+apple-account-locked.com
+apple-security-alert.net
+apple-support-center.com
+appleid-login.net
+icloud-account-verify.com
+icloud-login-secure.net
+icloud-storage-full.com
+itunes-payment-update.com
+apple-store-receipt.net
+find-my-iphone-locate.com
+
+# =============================================================
+# === PAYPAL TYPOSQUATTING & PHISHING ===
+# =============================================================
+paypa1.com
+paypa1.net
+paypai.com
+paypall.com
+paypa1-verify.com
+paypal-secure-login.net
+paypal-account-verify.com
+paypal-account-suspended.com
+paypal-login-update.net
+paypal-security-center.com
+paypal-transaction-review.com
+paypalsecurity-alert.com
+
+# =============================================================
+# === AMAZON TYPOSQUATTING & PHISHING ===
+# =============================================================
+amaz0n.com
+arnazon.com
+amazzon.com
+amzon.com
+amazon-security.com
+amaz0n-security.com
+amazon-account-verify.net
+amazon-order-update.com
+amazon-prime-renew.net
+amazon-login-secure.com
+amazon-support-helpdesk.com
+aws-account-verify.net
+aws-billing-alert.com
+
+# =============================================================
+# === FACEBOOK / META TYPOSQUATTING & PHISHING ===
+# =============================================================
+faceb00k.com
+facebok.com
+faceboook.com
+facebbok.com
+facebook-login-verify.com
+facebook-security-alert.net
+facebook-account-suspended.com
+facebook-verify-identity.com
+meta-account-secure.net
+instagram-verify-account.com
+instagram-login-secure.net
+instagram-account-suspended.com
+whatsapp-verify.com
+whatsapp-account-alert.net
+
+# =============================================================
+# === NETFLIX / STREAMING PHISHING ===
+# =============================================================
+netf1ix.com
+netlfix.com
+netfliix.com
+netflix-payment-update.com
+netflix-account-verify.com
+netflix-billing-update.net
+netflix-login-secure.com
+netflix-suspend-alert.net
+spotify-account-verify.com
+spotify-payment-update.net
+disney-plus-verify.com
+hulu-account-suspend.net
+
+# =============================================================
+# === BANK / FINANCIAL INSTITUTION PHISHING ===
+# =============================================================
+secure-banklogin.com
+login-verify-account.com
+bank-account-alert.net
+online-banking-secure.com
+bankofamerica-secure.com
+bankofamerica-verify.net
+wellsfargo-alert.com
+wellsfarg0.com
+chase-account-verify.com
+chase-secure-login.net
+citibank-alert.net
+citibank-login-secure.com
+paymentverify-secure.com
+credit-card-alert.net
+visa-account-update.com
+mastercard-verify-account.net
+
+# =============================================================
+# === CRYPTOCURRENCY EXCHANGE PHISHING ===
+# =============================================================
+coinbase-login-secure.com
+coinbase-account-verify.net
+binance-verify-account.com
+binance-login-secure.net
+kraken-account-alert.com
+crypto-wallet-recover.net
+blockchain-account-verify.com
+metamask-login-secure.net
+ledger-verify-seed.com
+trezor-wallet-restore.net
+trust-wallet-verify.com
+crypto-airdrop-claim.xyz
+
+# =============================================================
+# === CRYPTO MINING / CRYPTOJACKING ===
+# =============================================================
 coinhive.com
 crypto-loot.com
 coin-hive.com
 minero.cc
 jsecoin.com
+cryptonight-miner.com
+browsermine.net
+webminer.cc
+miner-gate.xyz
+hashvault-pool.net
+monero-miner-cdn.com
+cryptojack.top
 
-# === Known Malicious Infrastructure ===
+# =============================================================
+# === STEAM / GAMING PHISHING ===
+# =============================================================
+st3am.com
+stearn.com
+steamcommunity-trade.com
+steam-trade-offer.net
+steam-account-verify.com
+steam-free-items.xyz
+cs-go-skins-trade.com
+roblox-free-robux.xyz
+fortnite-v-bucks-free.com
+minecraft-account-verify.net
+
+# =============================================================
+# === SOCIAL ENGINEERING / FAKE TECH SUPPORT ===
+# =============================================================
+windows-defender-alert.com
+virus-detected-call-now.com
+pc-infected-support.net
+tech-support-scam.com
+your-computer-hacked.net
+microsoft-virus-alert.xyz
+apple-virus-detected.net
+security-warning-popup.com
+toll-free-support-scam.net
+
+# =============================================================
+# === DELIVERY SERVICE PHISHING ===
+# =============================================================
+ups-tracking-update.com
+ups-delivery-failed.net
+fedex-delivery-alert.com
+fedex-package-held.net
+dhl-shipment-verify.com
+dhl-customs-payment.net
+usps-delivery-failed.com
+tracking-package-update.xyz
+
+# =============================================================
+# === GOVERNMENT / TAX / IRS PHISHING ===
+# =============================================================
+irs-tax-refund.net
+irs-account-alert.com
+irs-verify-identity.xyz
+tax-refund-claim.net
+social-security-alert.com
+dmv-account-verify.net
+gov-benefit-claim.xyz
+stimulus-check-verify.com
+
+# =============================================================
+# === KNOWN MALICIOUS INFRASTRUCTURE ===
+# =============================================================
 darkweb-market.onion.link
 exploit-kit.pw
 phishing-server.su
 spam-relay.cc
+malvertising-cdn.com
+exploit-landing.net
+nuclear-exploit-kit.xyz
+rig-exploit-kit.com
+fallout-exploit-kit.net
+magnitude-exploit.xyz
+drive-by-download.net
 
-# === DGA-style domains (examples) ===
+# =============================================================
+# === SPYWARE / STALKERWARE / RAT PANELS ===
+# =============================================================
+spyware-panel.com
+stalkerware-track.net
+keylogger-panel.xyz
+screen-capture-c2.net
+webcam-spy.com
+mobile-rat-panel.net
+android-spy-app.com
+iphone-spy-track.net
+employee-spy-software.xyz
+
+# =============================================================
+# === DNS TUNNELING / DATA EXFILTRATION ===
+# =============================================================
+tunnel.dnstunnel.com
+exfil-data.evil.com
+dns-c2.hacker-server.com
+dnscat.tunnel-server.com
+iodine-tunnel.net
+dns-exfil.attacker.com
+data-tunnel.malware.xyz
+dnstunnel-c2.net
+
+# =============================================================
+# === DGA-STYLE DOMAINS (high-entropy examples) ===
+# These are known DGA seeds / samples seen in the wild.
+# =============================================================
 xkjhf82js.xyz
 a9d8f7g6h5.top
 qwerty123456.club
 zxcvbnm987.work
+j3k2l1m0n9.xyz
+p8q7r6s5t4.top
+a1b2c3d4e5.cc
+f9g8h7i6j5.net
+k4l3m2n1o0.xyz
+u5v4w3x2y1.club
 
-# === DNS Tunneling / Data Exfiltration ===
-tunnel.dnstunnel.com
-exfil-data.evil.com
-dns-c2.hacker-server.com
+# =============================================================
+# === HOMOGRAPH / IDN LOOKALIKE ATTACKS ===
+# Domains that use Unicode characters visually identical to ASCII.
+# =============================================================
+xn--googIe-hsa.com
+xn--pple-43d.com
+xn--mcrosoft-7ve.com
+xn--pypal-4ve.com
+xn--facebok-5za.com
 
-# === Test domains (for testing purposes) ===
+# =============================================================
+# === TEST DOMAINS (safe to leave in for development/testing) ===
+# =============================================================
 test-malware.example.com
 test-phishing.example.com
 test-c2.example.com
+ilay-vanunu.com

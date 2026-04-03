@@ -1,6 +1,28 @@
 """
-DNS Reporter - Prints findings to the screen and writes to a log file.
-Provides colored console output and structured log file writing.
+DNS Reporter - Output and logging for analysis results.
+
+This module is the final stage of the pipeline. It receives an
+AnalysisResult from the Analyzer and is responsible for:
+
+Console output (terminal / CLI mode)
+-------------------------------------
+- SAFE / LOW : silent by default (shown only with --verbose)
+- MEDIUM     : single compact colored line + optional whitelist prompt
+- HIGH       : full alert box with domain, source IP, and alert details
+- CRITICAL   : full alert box with red background highlight
+
+Log files (written per session, timestamped)
+--------------------------------------------
+- dns_queries_<timestamp>.log   : full audit trail — every query, one line each
+- alerts_<timestamp>.log        : HIGH and CRITICAL only, detailed format
+- dns_data_<timestamp>.jsonl    : machine-readable JSON Lines, one object per query
+                                  (useful for post-session analysis or SIEM ingestion)
+
+Interactive whitelist (CLI mode only)
+--------------------------------------
+After printing a MEDIUM+ alert the reporter prompts the user to whitelist
+the domain inline. This is not used in GUI mode — the GUI has its own
+whitelist buttons in the dashboard.
 """
 
 import json

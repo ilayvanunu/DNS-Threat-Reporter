@@ -1,5 +1,18 @@
 """
-DNS Parser - Reads DNS packet body and extracts the queried domain name.
+DNS Parser - Reads a raw Scapy DNS packet and extracts structured data.
+
+This module is the second stage of the pipeline. It receives a raw packet
+from DNSSniffer and converts it into a clean DNSQuery dataclass that the
+rest of the system works with.
+
+Key responsibilities:
+- Decode the binary qname field to a plain string (e.g. b'google.com.' -> 'google.com')
+- Map the numeric qtype to a human-readable record type (e.g. 1 -> 'A', 28 -> 'AAAA')
+- Extract the source IP address of the device making the query
+- Timestamp the query at parse time
+
+The DNSQuery dataclass is the central data object passed through the
+Analyzer and Reporter stages.
 """
 
 from __future__ import annotations
@@ -28,7 +41,21 @@ RECORD_TYPES = {
 
 @dataclass
 class DNSQuery:
-    """Parsed DNS query data."""
+    """
+    Structured representation of a single DNS query.
+
+    This is the central data object that flows through the entire pipeline
+    (Sniffer -> Parser -> Analyzer -> Reporter / GUI).
+
+    Attributes:
+        domain:      The fully-qualified domain name being queried
+                     (e.g. 'sub.example.com').
+        query_type:  DNS record type as a string (e.g. 'A', 'AAAA', 'TXT').
+        source_ip:   IP address of the host that sent the query.
+        timestamp:   When the query was captured (defaults to now).
+        raw_packet:  Original Scapy packet, kept for advanced inspection.
+                     Excluded from repr to keep logs readable.
+    """
     domain: str
     query_type: str
     source_ip: str
@@ -37,11 +64,15 @@ class DNSQuery:
 
     @property
     def subdomain_depth(self) -> int:
-        """Number of subdomain levels (e.g., a.b.c.com = 3)."""
+        """
+        Number of dot-separated labels minus 1.
+        Example: 'a.b.c.com' -> 3, 'example.com' -> 1.
+        """
         return len(self.domain.split(".")) - 1
 
     @property
     def domain_length(self) -> int:
+        """Total character length of the full domain string."""
         return len(self.domain)
 
 

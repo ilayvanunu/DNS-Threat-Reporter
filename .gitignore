@@ -4,7 +4,7 @@ __pycache__/
 *.pyo
 .pytest_cache/
 
-# Logs - generated at runtime, don't commit
+# Logs - generated at runtime
 logs/
 
 # User whitelist - personal per machine, starts empty on each clone
@@ -22,5 +22,3 @@ env/
 .vscode/
 .idea/
 
-# Claude Code - entire directory is personal (settings, permissions, session data)
-.claude/

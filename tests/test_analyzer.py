@@ -1,4 +1,22 @@
-"""Tests for the DNS Analyzer module."""
+"""
+Tests for the DNS Analyzer module.
+
+Each test class covers one detection method independently.
+The analyzer fixture sets up a minimal analyzer with a small
+hardcoded blacklist so tests are fast and self-contained.
+
+Test classes
+------------
+TestBlacklist  - exact match, subdomain match, safe domain
+TestEntropy    - normal domain, high-entropy domain, DGA-style domain
+TestLength     - normal length, very long domain
+TestTunneling  - hex-encoded subdomain, normal subdomain
+TestTLD        - suspicious TLD (.tk), normal TLD (.com)
+TestWhitelist  - built-in safe domain not flagged
+TestStats      - domain counter increments correctly
+
+Run with:  pytest tests/test_analyzer.py -v
+"""
 
 import pytest
 import sys
