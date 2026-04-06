@@ -64,7 +64,7 @@ python3 main.py --demo
 
 ---
 
-### Step 4 — Open the Dashboard (Optional)
+### Step 4 — Open the Dashboard (Recommended)
 
 The dashboard is a web page that opens in your browser and shows threats in real time. It works on all platforms without admin rights in demo mode.
 
